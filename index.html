@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="ar-MA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Une question pour toi</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Outfit:wght@400;600&display=swap">
+<style>
+/* Layout: one centered card on a deep wine night, three scenes swapped in place, hearts falling on a canvas behind */
+:root {
+  --night: #1d0a14;
+  --wine: #3a1027;
+  --rose: #ff5c8a;
+  --blush: #ffc2d4;
+  --cream: #fff4f7;
+  --muted: #c99aac;
+  --display: "Gloock", Georgia, "Times New Roman", serif;
+  --body: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body {
+  background: radial-gradient(120% 90% at 50% 0%, var(--wine), var(--night) 70%);
+  background-color: var(--night);
+  color: var(--cream);
+  font-family: var(--body);
+  font-size: 17px;
+  padding-inline: 16px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.scene {
+  position: relative;
+  z-index: 1;
+  max-width: 34rem;
+  width: 100%;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+  animation: rise .7s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes rise { from { transform: translateY(14px); opacity: .4; } to { transform: none; opacity: 1; } }
+.eyebrow { text-transform: uppercase; letter-spacing: .18em; font-size: .78rem; color: var(--muted); margin: 0; }
+h1 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 9vw, 4.2rem);
+  line-height: 1.05;
+  margin: 0;
+  text-wrap: balance;
+}
+h1 em { font-style: normal; color: var(--rose); }
+p.lead { margin: 0; color: var(--blush); line-height: 1.55; max-width: 26rem; }
+.heart {
+  width: 88px; height: 88px;
+  animation: beat 1.2s ease-in-out infinite;
+}
+@keyframes beat { 0%,100% { transform: scale(1); } 15% { transform: scale(1.15); } 30% { transform: scale(1); } 45% { transform: scale(1.1); } }
+.row { display: flex; gap: 1rem; align-items: center; justify-content: center; flex-wrap: wrap; min-height: 5rem; }
+button {
+  font: 600 1.05rem var(--body);
+  border: 0;
+  border-radius: 999px;
+  padding: .85em 2em;
+  cursor: pointer;
+  transition: transform .25s ease, background .2s ease;
+}
+button:focus-visible { outline: 3px solid var(--blush); outline-offset: 3px; }
+.yes { background: var(--rose); color: var(--night); box-shadow: 0 10px 30px -8px var(--rose); }
+.yes:hover { background: var(--blush); }
+.no { background: transparent; color: var(--muted); border: 1.5px solid var(--muted); }
+.no.flee { position: fixed; z-index: 2; transition: left .25s ease, top .25s ease; }
+.signature { font-family: var(--display); font-size: 1.4rem; color: var(--rose); margin: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .heart, .scene { animation: none; }
+  .no.flee { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="sky"></canvas>
+
+<section class="scene" id="s1">
+  <svg class="heart" viewBox="0 0 32 29" aria-hidden="true"><path fill="#ff5c8a" d="M16 29 2.7 15.7A8 8 0 0 1 16 4.4 8 8 0 0 1 29.3 15.7Z"/></svg>
+  <p class="eyebrow">Message ghir lik</p>
+  <h1>3ndi wa7d so2al <em>mohim</em></h1>
+  <p class="lead">Wa3dni tjawbni b sra7a.</p>
+  <button class="yes" id="open">Wa3dtek</button>
+</section>
+
+<section class="scene" id="s2" hidden>
+  <p class="eyebrow">Ghir b chwiya</p>
+  <h1>Wach <em>katbghini</em>&nbsp;?</h1>
+  <p class="lead" id="hint">Kayn ghir jawab wa7d s7i7.</p>
+  <div class="row">
+    <button class="yes" id="yes">Ah</button>
+    <button class="no" id="no">La</button>
+  </div>
+</section>
+
+<section class="scene" id="s3" hidden>
+  <svg class="heart" viewBox="0 0 32 29" aria-hidden="true"><path fill="#ff5c8a" d="M16 29 2.7 15.7A8 8 0 0 1 16 4.4 8 8 0 0 1 29.3 15.7Z"/></svg>
+  <p class="eyebrow">Kont 3aref</p>
+  <h1>Ana tani, <em>kanbghik</em></h1>
+  <p class="lead">Ktar mn ay klam ymken ytgal. Choukran 3la kolchi, w 3la wjoudek f 7yati.</p>
+  <p class="signature">❤ l dima</p>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+const show = id => { ['s1','s2','s3'].forEach(s => $(s).hidden = s !== id); };
+
+$('open').addEventListener('click', () => show('s2'));
+
+const lines = [
+  "B sse7 ?",
+  "B sse7 b sse7 ?",
+  "Ma tkhalinich hakka 🥺",
+  "Had lbouton ma khdamch 😌",
+  "Ghadi t'herres li qelbi 💔",
+  "Yallah, Ah hiya lli zwina",
+  "Akhir fursa !"
+];
+let tries = 0;
+const no = $('no'), yes = $('yes');
+
+function flee(e) {
+  if (e) e.preventDefault();
+  tries++;
+  $('hint').textContent = lines[Math.min(tries - 1, lines.length - 1)];
+  yes.style.transform = `scale(${Math.min(1 + tries * 0.15, 2.2)})`;
+  const r = no.getBoundingClientRect();
+  if (!no.classList.contains('flee')) {
+    no.style.left = r.left + 'px'; no.style.top = r.top + 'px';
+    no.classList.add('flee');
+  }
+  const pad = 16;
+  const maxX = window.innerWidth - r.width - pad;
+  const maxY = window.innerHeight - r.height - pad;
+  let x, y, guard = 0;
+  const yr = yes.getBoundingClientRect();
+  do {
+    x = pad + Math.random() * Math.max(0, maxX - pad);
+    y = pad + Math.random() * Math.max(0, maxY - pad);
+    guard++;
+  } while (guard < 30 && (Math.abs(x - r.left) < 90 && Math.abs(y - r.top) < 60 ||
+           x < yr.right + 10 && x + r.width > yr.left - 10 && y < yr.bottom + 10 && y + r.height > yr.top - 10));
+  requestAnimationFrame(() => { no.style.left = x + 'px'; no.style.top = y + 'px'; });
+}
+no.addEventListener('mouseenter', flee);
+no.addEventListener('touchstart', flee, { passive: false });
+no.addEventListener('click', flee);
+
+yes.addEventListener('click', () => {
+  no.remove();
+  show('s3');
+  burst();
+});
+
+/* falling hearts */
+const c = $('sky'), ctx = c.getContext('2d');
+let W, H, hearts = [];
+const dpr = Math.min(window.devicePixelRatio || 1, 2);
+function size() { W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+size(); addEventListener('resize', size);
+const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const colors = ['#ff5c8a', '#ffc2d4', '#ff8fb0', '#e8376b'];
+function add(n, fromTop) {
+  for (let i = 0; i < n; i++) hearts.push({
+    x: Math.random() * W,
+    y: fromTop ? -20 - Math.random() * H * 0.5 : Math.random() * H,
+    s: 6 + Math.random() * 14,
+    v: 0.4 + Math.random() * 1.2,
+    w: Math.random() * Math.PI * 2,
+    a: 0.25 + Math.random() * 0.6,
+    col: colors[(Math.random() * colors.length) | 0]
+  });
+}
+function drawHeart(h) {
+  ctx.save();
+  ctx.globalAlpha = h.a;
+  ctx.fillStyle = h.col;
+  ctx.translate(h.x + Math.sin(h.w) * 12, h.y);
+  ctx.scale(h.s / 32, h.s / 32);
+  ctx.beginPath();
+  ctx.moveTo(0, 12);
+  ctx.bezierCurveTo(-16, 0, -10, -14, 0, -6);
+  ctx.bezierCurveTo(10, -14, 16, 0, 0, 12);
+  ctx.fill();
+  ctx.restore();
+}
+function tick() {
+  ctx.clearRect(0, 0, W, H);
+  for (const h of hearts) {
+    h.y += h.v; h.w += 0.02;
+    if (h.y > H + 20) { h.y = -20; h.x = Math.random() * W; }
+    drawHeart(h);
+  }
+  if (!calm) requestAnimationFrame(tick);
+}
+add(28, false);
+tick();
+function burst() {
+  add(calm ? 0 : 140, true);
+  hearts.forEach(h => h.a = Math.min(1, h.a + 0.2));
+  if (calm) tick();
+}
+</script>
+</body>
+</html>
