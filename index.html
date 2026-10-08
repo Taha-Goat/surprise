@@ -19,7 +19,9 @@
   --body: "Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
   color-scheme: dark;
 }
-html, body { height: 100%; }
+html, body { height: 100%; margin: 0; }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   background: radial-gradient(120% 90% at 50% 0%, var(--wine), var(--night) 70%);
   background-color: var(--night);
